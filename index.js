@@ -33,7 +33,30 @@ async function run() {
 
     const toyCollection = client.db('toyDB').collection('toys')
 
-    app.post('/addedToy', async (req, res) => {
+    //------Search bar implement
+    const indexKeys = { product_name: 1 };
+    const indexOptions = { name: 'toyName' }
+    const result = await toyCollection.createIndex(indexKeys, indexOptions)
+    
+    app.get('/toySearch/:text', async (req, res) => {
+      const searchText = req.params.text;
+      const result = await toyCollection.find({
+        $or: [
+          { product_name: { $regex: searchText, $options: "i" } }
+        ]
+      }).toArray()
+      res.send(result)
+    })
+
+
+
+
+    app.get('/toys', async (req, res) => {
+      const result = await toyCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.post('/toys', async (req, res) => {
       const addedToy = req.body;
       console.log(addedToy);
       const result = await toyCollection.insertOne(addedToy);
