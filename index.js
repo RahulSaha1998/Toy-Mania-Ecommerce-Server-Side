@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 require('dotenv').config()
 
@@ -37,7 +37,7 @@ async function run() {
     const indexKeys = { product_name: 1 };
     const indexOptions = { name: 'toyName' }
     const result = await toyCollection.createIndex(indexKeys, indexOptions)
-    
+
     app.get('/toySearch/:text', async (req, res) => {
       const searchText = req.params.text;
       const result = await toyCollection.find({
@@ -50,9 +50,15 @@ async function run() {
 
 
 
-
     app.get('/toys', async (req, res) => {
       const result = await toyCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/toys/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await toyCollection.findOne(query)
       res.send(result)
     })
 
