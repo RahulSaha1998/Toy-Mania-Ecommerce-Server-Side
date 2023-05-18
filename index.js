@@ -49,19 +49,36 @@ async function run() {
     })
 
 
+    //------------------------------------------
 
+
+    //get all data
     app.get('/toys', async (req, res) => {
       const result = await toyCollection.find().toArray();
       res.send(result)
     })
 
+    //get one specific data
     app.get('/toys/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await toyCollection.findOne(query)
       res.send(result)
     })
 
+    //get some data
+    app.get('/myToys', async (req, res) => {
+      console.log(req.query.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await toyCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
+    //post a data
     app.post('/toys', async (req, res) => {
       const addedToy = req.body;
       console.log(addedToy);
