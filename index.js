@@ -52,11 +52,11 @@ async function run() {
     //------------------------------------------
 
 
-    //get all data
+    //get all data with set limit of 20 data
     app.get('/toys', async (req, res) => {
-      const result = await toyCollection.find().toArray();
-      res.send(result)
-    })
+      const result = await toyCollection.find().limit(20).toArray();
+      res.send(result);
+    });
 
     //get one specific data
     app.get('/toys/:id', async (req, res) => {
