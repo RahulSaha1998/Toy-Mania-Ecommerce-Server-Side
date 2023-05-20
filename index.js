@@ -46,8 +46,7 @@ async function run() {
         ]
       }).toArray()
       res.send(result)
-    })
-
+    })    
 
     //------------------------------------------
 
@@ -73,16 +72,26 @@ async function run() {
       if (req.query?.email) {
         query = { email: req.query.email }
       }
-      const result = await toyCollection.find(query).toArray()
-      res.send(result)
-    })
+      
+      let sortOption = { price: 1 }; // Default: Sort in ascending order based on price
+      if (req.query?.sort === 'desc') {
+        sortOption = { price: -1 }; // Sort in descending order based on price
+      }
+    
+      const result = await toyCollection.find(query).sort(sortOption).toArray();
+      res.send(result);
+    });
+    
+    
 
 
     //post a data
     app.post('/toys', async (req, res) => {
       const addedToy = req.body;
-      console.log(addedToy);
+      // body.createdAt = new Date()
+
       const result = await toyCollection.insertOne(addedToy);
+      console.log(result);
       res.send(result);
 
     })
