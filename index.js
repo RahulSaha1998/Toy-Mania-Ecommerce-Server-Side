@@ -82,8 +82,6 @@ async function run() {
       res.send(result);
     });
     
-    
-
 
     //post a data
     app.post('/toys', async (req, res) => {
@@ -95,7 +93,6 @@ async function run() {
       res.send(result);
 
     })
-
 
     //update
     app.put('/toys/:id', async (req, res) => {
